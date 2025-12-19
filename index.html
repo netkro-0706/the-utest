@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fade In/Out 이미지</title>
+    <style>
+      div:first-child {
+        position: relative;
+        width: 100%;
+        height: 500px; /* 원하는 높이로 조절 */
+        overflow: hidden;
+      }
+
+      .image1,
+      .image2 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .image1 {
+        opacity: 1;
+        animation: fadeOut 4s infinite;
+      }
+
+      .image2 {
+        opacity: 0;
+        animation: fadeIn 4s infinite;
+      }
+
+      .image1 figure,
+      .image2 figure {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      .image1 picture,
+      .image2 picture {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .image1 img,
+      .image2 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      @keyframes fadeOut {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeIn {
+        0%,
+        49% {
+          opacity: 0;
+        }
+        50%,
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* 콘텐츠 레이아웃 - PC: 세로 배치 */
+      .content-wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      /* SP: header가 위, main-image와 bff-image가 가로로 */
+      @media (max-width: 812px) {
+        .content-wrapper {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto auto;
+        }
+
+        .header {
+          grid-column: 1 / -1;
+          grid-row: 1;
+        }
+
+        .main-image {
+          grid-column: 1;
+          grid-row: 2;
+        }
+
+        .bff-image {
+          grid-column: 2;
+          grid-row: 2;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="iamgeWrapper">
+      <div class="image1">
+        <figure>
+          <picture>
+            <source media="(min-width: 813px)" srcset="pc-image.jpg" />
+            <source media="(max-width: 812px)" srcset="sp-image.jpg" />
+            <img src="pc-image.jpg" alt="Image 1" />
+          </picture>
+        </figure>
+      </div>
+      <div class="image2">
+        <figure>
+          <picture>
+            <source media="(min-width: 813px)" srcset="pc-image2.jpg" />
+            <source media="(max-width: 812px)" srcset="sp-image2.jpg" />
+            <img src="pc-image2.jpg" alt="Image 2" />
+          </picture>
+        </figure>
+      </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="main-image">
+        <figure>
+          <picture>
+            <source media="(min-width: 813px)" srcset="pc-image.jpg" />
+            <source media="(max-width: 812px)" srcset="sp-image.jpg" />
+            <img src="pc-image.jpg" alt="Image 1" />
+          </picture>
+        </figure>
+      </div>
+
+      <h1 class="header">header</h1>
+
+      <div class="bff-image">
+        <p>bff</p>
+      </div>
+    </div>
+  </body>
+</html>
