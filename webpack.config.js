@@ -10,14 +10,41 @@ module.exports = async (env, { mode }) => {
 
   return {
     mode: mode,
-    entry: './src/main.tsx',
+    entry: {
+      main: './src/main.tsx',
+    },
     output: {
-      // filename: 'main.js',
-
       filename: (pathData) => {
-        return pathData.chunk.name === 'main' ? 'main.js' : '[name].bundle.js';
+        // 정확히 'main'인 경우만 main.js
+        return pathData.chunk.name === 'main' ? 'main.js' : '[name].js';
       },
-      chunkFilename: '[name].bundle.js',
+      chunkFilename: (pathData) => {
+        // 청크 이름이 있으면 그대로 사용 (main-6543 → main-6543.js)
+        const chunkName = pathData?.chunk?.name;
+        const chunkId = pathData?.chunk?.id;
+
+        // 이미 main-으로 시작하는 경우 그대로 사용
+        if (
+          chunkName &&
+          typeof chunkName === 'string' &&
+          chunkName.startsWith('main-')
+        ) {
+          return `${chunkName}.js`;
+        }
+
+        // vendors 같은 경우 main-vendors로 변경
+        if (
+          chunkName &&
+          typeof chunkName === 'string' &&
+          chunkName !== 'main'
+        ) {
+          return `main-${chunkName}.js`;
+        }
+
+        // ID를 사용하여 main-[id].js 형식으로
+        const id = chunkId != null ? String(chunkId) : 'chunk';
+        return `main-${id}.js`;
+      },
       path: path.resolve(
         `./dist/components@${process.env.npm_package_version}`
       ),
@@ -75,21 +102,18 @@ module.exports = async (env, { mode }) => {
     },
     devtool: isDevelopment ? 'source-map' : false,
     optimization: {
+      runtimeChunk: false, // 런타임을 main.js에 포함 (자동 로드 위해 필요)
       splitChunks: {
         chunks: 'all',
         maxSize: 60 * 1024, // 60KB
         minSize: 0,
         cacheGroups: {
-          default: {
-            minChunks: 2,
-            priority: -20,
-            reuseExistingChunk: true,
-          },
+          default: false, // default 비활성화하여 충돌 방지
           vendor: {
             test: /[\\/]node_modules[\\/]/,
-            name: 'main',
             priority: 10,
             reuseExistingChunk: true,
+            // name을 지정하지 않으면 chunkFilename이 처리
           },
         },
       },
