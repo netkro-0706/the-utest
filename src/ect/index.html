@@ -3,146 +3,326 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fade In/Out 이미지</title>
-    <style>
-      div:first-child {
-        position: relative;
-        width: 100%;
-        height: 500px; /* 원하는 높이로 조절 */
-        overflow: hidden;
-      }
-
-      .image1,
-      .image2 {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
-
-      .image1 {
-        opacity: 1;
-        animation: fadeOut 4s infinite;
-      }
-
-      .image2 {
-        opacity: 0;
-        animation: fadeIn 4s infinite;
-      }
-
-      .image1 figure,
-      .image2 figure {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-      }
-
-      .image1 picture,
-      .image2 picture {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      .image1 img,
-      .image2 img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      @keyframes fadeOut {
-        0%,
-        49% {
-          opacity: 1;
-        }
-        50%,
-        100% {
-          opacity: 0;
-        }
-      }
-
-      @keyframes fadeIn {
-        0%,
-        49% {
-          opacity: 0;
-        }
-        50%,
-        100% {
-          opacity: 1;
-        }
-      }
-
-      /* 콘텐츠 레이아웃 - PC: 세로 배치 */
-      .content-wrapper {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-
-      /* SP: header가 위, main-image와 bff-image가 가로로 */
-      @media (max-width: 812px) {
-        .content-wrapper {
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: auto auto;
-        }
-
-        .header {
-          grid-column: 1 / -1;
-          grid-row: 1;
-        }
-
-        .main-image {
-          grid-column: 1;
-          grid-row: 2;
-        }
-
-        .bff-image {
-          grid-column: 2;
-          grid-row: 2;
-        }
-      }
-    </style>
+    <title>form tester</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="iamgeWrapper">
-      <div class="image1">
-        <figure>
-          <picture>
-            <source media="(min-width: 813px)" srcset="pc-image.jpg" />
-            <source media="(max-width: 812px)" srcset="sp-image.jpg" />
-            <img src="pc-image.jpg" alt="Image 1" />
-          </picture>
-        </figure>
-      </div>
-      <div class="image2">
-        <figure>
-          <picture>
-            <source media="(min-width: 813px)" srcset="pc-image2.jpg" />
-            <source media="(max-width: 812px)" srcset="sp-image2.jpg" />
-            <img src="pc-image2.jpg" alt="Image 2" />
-          </picture>
-        </figure>
-      </div>
-    </div>
-
-    <div class="content-wrapper">
-      <div class="main-image">
-        <figure>
-          <picture>
-            <source media="(min-width: 813px)" srcset="pc-image.jpg" />
-            <source media="(max-width: 812px)" srcset="sp-image.jpg" />
-            <img src="pc-image.jpg" alt="Image 1" />
-          </picture>
-        </figure>
+    <form id="uniForm" class="form-container">
+      <div class="card header-card">
+        <h1 class="form-title">테스트 폼</h1>
+        <p class="form-description">폼 설명을 입력하세요</p>
       </div>
 
-      <h1 class="header">header</h1>
-
-      <div class="bff-image">
-        <p>bff</p>
+      <!-- 섹션 1: Email -->
+      <div class="card">
+        <label for="email" class="field-label"
+          >Email <span class="required-marker">*</span></label
+        >
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="답변을 입력하세요"
+          class="form-input"
+        />
       </div>
-    </div>
+
+      <!-- 섹션 2: Order number -->
+      <div class="card">
+        <label for="orderNumber" class="field-label"
+          >Order number <span class="required-marker">*</span></label
+        >
+        <input
+          type="text"
+          id="orderNumber"
+          name="orderNumber"
+          required
+          placeholder="답변을 입력하세요"
+          class="form-input"
+        />
+      </div>
+
+      <!-- 섹션 3: Return pick-up address -->
+      <div class="card">
+        <label for="returnAddress" class="field-label"
+          >Return pick-up address (please include pin code)
+          <span class="required-marker">*</span></label
+        >
+        <textarea
+          id="returnAddress"
+          name="returnAddress"
+          rows="4"
+          required
+          placeholder="답변을 입력하세요"
+          class="form-textarea"
+        ></textarea>
+      </div>
+
+      <!-- 섹션 4: Return item quantity -->
+      <div class="card">
+        <label for="returnQuantity" class="field-label"
+          >Return item quantity <span class="required-marker">*</span></label
+        >
+        <input
+          type="number"
+          id="returnQuantity"
+          name="returnQuantity"
+          required
+          placeholder="답변을 입력하세요"
+          class="form-input"
+        />
+      </div>
+
+      <!-- 섹션 5: Mobile phone number -->
+      <div class="card">
+        <label for="mobilePhone" class="field-label"
+          >Mobile phone number (10 Digits)
+          <span class="required-marker">*</span></label
+        >
+        <input
+          type="tel"
+          id="mobilePhone"
+          name="mobilePhone"
+          required
+          pattern="[0-9]{10}"
+          maxlength="10"
+          placeholder="10자리 숫자를 입력하세요"
+          class="form-input"
+        />
+      </div>
+
+      <!-- 섹션 6: Return reason (라디오 버튼) -->
+      <div class="card">
+        <label class="field-label"
+          >Return reason <span class="required-marker">*</span></label
+        >
+        <div class="radio-group">
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="returnReason"
+              value="defective"
+              required
+              class="radio-input"
+            />
+            <span>Defective item</span>
+          </label>
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="returnReason"
+              value="wrong"
+              required
+              class="radio-input"
+            />
+            <span>Wrong item received</span>
+          </label>
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="returnReason"
+              value="size"
+              required
+              class="radio-input"
+            />
+            <span>Wrong size</span>
+          </label>
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="returnReason"
+              value="other"
+              required
+              class="radio-input"
+              id="returnReasonOther"
+            />
+            <span class="other-label-text"
+              >Other:
+              <input
+                type="text"
+                id="otherReasonText"
+                name="otherReasonText"
+                placeholder=""
+                class="other-text-input"
+              />
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 섹션 7: Check for return condition (체크박스) -->
+      <div class="card">
+        <label class="field-label"
+          >Check for return condition
+          <span class="required-marker">*</span></label
+        >
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              name="returnCondition"
+              value="unused"
+              required
+              class="checkbox-input"
+            />
+            <span>Item is unused</span>
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              name="returnCondition"
+              value="originalPackage"
+              required
+              class="checkbox-input"
+            />
+            <span>Original package included</span>
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              name="returnCondition"
+              value="tags"
+              required
+              class="checkbox-input"
+            />
+            <span>Tags attached</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 안보이는 honeypot 필드 (봇 방지용) -->
+      <input
+        type="text"
+        id="website"
+        name="website"
+        tabindex="-1"
+        autocomplete="off"
+        class="honeypot-field"
+      />
+
+      <!-- 제출 버튼 섹션 -->
+      <div class="submit-section">
+        <button type="submit" id="submitBtn" class="submit-btn">제출</button>
+        <button type="button" id="clearBtn" class="clear-btn">Clear</button>
+      </div>
+    </form>
   </body>
+  <script>
+    // Honeypot 필드 감지 및 제출 버튼 비활성화
+    const honeypotField = document.getElementById('website');
+    const submitBtn = document.getElementById('submitBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const form = document.getElementById('uniForm');
+
+    honeypotField.addEventListener('input', function () {
+      if (this.value.trim() !== '') {
+        // honeypot 필드에 값이 입력되면 제출 버튼 비활성화
+        submitBtn.disabled = true;
+      } else {
+        // 값이 비어있으면 제출 버튼 활성화
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Other 라디오 버튼 선택 시 텍스트 입력 필드 필수 여부 설정
+    const otherReasonText = document.getElementById('otherReasonText');
+    const returnReasonRadios = form.querySelectorAll(
+      'input[name="returnReason"]'
+    );
+
+    returnReasonRadios.forEach((radio) => {
+      radio.addEventListener('change', function () {
+        if (this.value === 'other') {
+          otherReasonText.required = true;
+        } else {
+          otherReasonText.required = false;
+          otherReasonText.value = '';
+        }
+      });
+    });
+
+    // Clear 버튼 클릭 시 폼 전체 초기화
+    clearBtn.addEventListener('click', function () {
+      form.reset();
+      // 라디오 버튼과 체크박스도 명시적으로 초기화
+      const radioButtons = form.querySelectorAll('input[type="radio"]');
+      radioButtons.forEach((radio) => {
+        radio.checked = false;
+      });
+      const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      // Other 텍스트 입력 필드 초기화
+      otherReasonText.required = false;
+    });
+
+    // 폼 제출 처리
+    document
+      .getElementById('uniForm')
+      .addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        // honeypot 필드에 값이 있으면 제출 방지
+        if (honeypotField.value.trim() !== '') {
+          alert('Spam detected. Submission is not allowed.');
+          return false;
+        }
+
+        // FormData 생성
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+
+        // honeypot 필드는 출력에서 제외
+        delete data.website;
+
+        // Other 옵션이 선택되지 않았으면 otherReasonText 제외
+        if (data.returnReason !== 'other') {
+          delete data.otherReasonText;
+        }
+
+        // 제출 버튼 비활성화 (중복 제출 방지)
+        submitBtn.disabled = true;
+        const originalBtnText = submitBtn.textContent;
+        submitBtn.textContent = 'Submitting...';
+
+        try {
+          // Google Apps Script 웹앱 URL로 POST 요청
+          // TODO: 아래 URL을 실제 GAS 웹앱 배포 URL로 변경하세요
+          const GAS_WEB_APP_URL =
+            'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
+          const response = await fetch(GAS_WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors', // CORS 이슈 회피 (GAS는 no-cors 지원)
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+
+          // no-cors 모드에서는 response를 읽을 수 없으므로 항상 성공으로 처리
+          alert('Form submitted successfully!');
+          form.reset();
+
+          // 라디오 버튼과 체크박스 초기화
+          const radioButtons = form.querySelectorAll('input[type="radio"]');
+          radioButtons.forEach((radio) => {
+            radio.checked = false;
+          });
+          const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+          checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+          });
+          otherReasonText.required = false;
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          alert('Failed to submit form. Please try again.');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+        }
+      });
+  </script>
 </html>
