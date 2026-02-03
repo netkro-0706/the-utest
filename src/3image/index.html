@@ -86,8 +86,8 @@
         .leftImageWrapper {
           position: sticky;
           top: 0;
-          /* 1170px: 428px, 1920px: 834px - 반응형으로 자동 조절 */
-          width: clamp(428px, calc(428px + (834 - 428) * ((100vw - 1170px) / (1920 - 1170))), 834px);
+          /* 화면이 커질수록 작아지고, 작아질수록 커짐: 1170px: 834px, 1920px: 428px */
+          width: clamp(428px, calc(834px - (834 - 428) * ((100vw - 1170px) / (1920 - 1170))), 834px);
           height: 100vh;
         }
 
