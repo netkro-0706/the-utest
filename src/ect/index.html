@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <form id="uniForm" class="form-container">
+    <form
+      id="uniForm"
+      class="form-container"
+      action="https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse"
+      method="POST"
+      target="_blank"
+    >
       <div class="card header-card">
         <h1 class="form-title">테스트 폼</h1>
         <p class="form-description">폼 설명을 입력하세요</p>
@@ -231,8 +237,26 @@
       'input[name="returnReason"]'
     );
 
+    // Other 텍스트 입력 시 validation 메시지 초기화
+    otherReasonText.addEventListener('input', function () {
+      if (this.value.trim() !== '') {
+        this.setCustomValidity(''); // 텍스트가 입력되면 validation 메시지 제거
+      }
+    });
+
     returnReasonRadios.forEach((radio) => {
       radio.addEventListener('change', function () {
+        // 라디오 버튼 변경 시 항상 validation 메시지 초기화
+        // required 속성을 잠시 제거하여 validation 상태 완전히 리셋
+        const wasRequired = otherReasonText.required;
+        otherReasonText.required = false;
+        otherReasonText.setCustomValidity('');
+
+        // 값을 임시로 변경하여 validation 상태 리셋
+        const currentValue = otherReasonText.value;
+        otherReasonText.value = '';
+        otherReasonText.value = currentValue;
+
         if (this.value === 'other') {
           otherReasonText.required = true;
         } else {
@@ -256,73 +280,48 @@
       });
       // Other 텍스트 입력 필드 초기화
       otherReasonText.required = false;
+      otherReasonText.setCustomValidity(''); // validation 메시지 초기화
     });
 
     // 폼 제출 처리
-    document
-      .getElementById('uniForm')
-      .addEventListener('submit', async function (e) {
+    document.getElementById('uniForm').addEventListener('submit', function (e) {
+      // honeypot 필드에 값이 있으면 제출 방지
+      if (honeypotField.value.trim() !== '') {
         e.preventDefault();
+        alert('Spam detected. Submission is not allowed.');
+        return false;
+      }
 
-        // honeypot 필드에 값이 있으면 제출 방지
-        if (honeypotField.value.trim() !== '') {
-          alert('Spam detected. Submission is not allowed.');
+      // FormData 생성
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+
+      // Other 옵션이 선택되었는데 텍스트가 비어있으면 제출 방지
+      // Google Form entry ID 형식 사용 (예: entry.123456789)
+      // TODO: returnReason의 실제 entry ID로 변경하세요
+      const returnReasonEntryId = 'entry.XXXXX'; // 실제 entry ID로 변경 필요
+      if (data[returnReasonEntryId] === 'other') {
+        if (!otherReasonText.value || otherReasonText.value.trim() === '') {
+          e.preventDefault();
+          otherReasonText.setCustomValidity(
+            'Please specify the reason in the Other field.'
+          );
+          otherReasonText.reportValidity();
           return false;
+        } else {
+          otherReasonText.setCustomValidity(''); // 유효성 통과 시 메시지 제거
         }
-
-        // FormData 생성
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData);
-
-        // honeypot 필드는 출력에서 제외
-        delete data.website;
-
+      } else {
         // Other 옵션이 선택되지 않았으면 otherReasonText 제외
-        if (data.returnReason !== 'other') {
-          delete data.otherReasonText;
-        }
+        otherReasonText.setCustomValidity(''); // 메시지 초기화
+      }
 
-        // 제출 버튼 비활성화 (중복 제출 방지)
-        submitBtn.disabled = true;
-        const originalBtnText = submitBtn.textContent;
-        submitBtn.textContent = 'Submitting...';
+      // 제출 버튼 비활성화 (중복 제출 방지)
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
 
-        try {
-          // Google Apps Script 웹앱 URL로 POST 요청
-          // TODO: 아래 URL을 실제 GAS 웹앱 배포 URL로 변경하세요
-          const GAS_WEB_APP_URL =
-            'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
-
-          const response = await fetch(GAS_WEB_APP_URL, {
-            method: 'POST',
-            mode: 'no-cors', // CORS 이슈 회피 (GAS는 no-cors 지원)
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-          });
-
-          // no-cors 모드에서는 response를 읽을 수 없으므로 항상 성공으로 처리
-          alert('Form submitted successfully!');
-          form.reset();
-
-          // 라디오 버튼과 체크박스 초기화
-          const radioButtons = form.querySelectorAll('input[type="radio"]');
-          radioButtons.forEach((radio) => {
-            radio.checked = false;
-          });
-          const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-          checkboxes.forEach((checkbox) => {
-            checkbox.checked = false;
-          });
-          otherReasonText.required = false;
-        } catch (error) {
-          console.error('Error submitting form:', error);
-          alert('Failed to submit form. Please try again.');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalBtnText;
-        }
-      });
+      // Google Form으로 직접 제출 (기본 form 동작 허용)
+      // form의 action과 method로 자동 제출됨
+    });
   </script>
 </html>
